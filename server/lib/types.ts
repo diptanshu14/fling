@@ -13,3 +13,7 @@ export type UserType = {
     dislikes: mongoose.Schema.Types.ObjectId[]
     matches: mongoose.Schema.Types.ObjectId[]
 }
+
+export type UserDocument = UserType & Document & {
+	comparePassword(enteredPassword: string): Promise<boolean>;
+}

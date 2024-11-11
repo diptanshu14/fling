@@ -19,3 +19,21 @@ export const createUserService = async (
 
     return { user: userObject, token }
 }
+
+
+export const loginService = async (email: string, password: string) => {
+    const user = await User.findOne({ email })
+    if (!user || !(await user.comparePassword(password))) {
+        return { user: null, token: null }
+    }
+    const userId = user._id
+
+    const token = jwt.sign({ userId }, process.env.JWT_SECRET as string, {
+		expiresIn: "7d",
+	})
+
+    const userObject: Partial<UserType> = user.toObject()
+    delete userObject.password 
+
+    return { user: userObject, token }
+}
